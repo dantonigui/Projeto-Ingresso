@@ -3,13 +3,13 @@ const EventSchema = require('../models/Event')
 //Criar Evento
 exports.createEvent = async (req, res) => {
   try {
-    const { title, description, date, price } = req.body;
+    const { title, description, date, price, image } = req.body;
 
     if (!title || !description || !date || price == null) {
       return res.status(400).json({ message: "Todos os campos são obrigatórios." });
     }
 
-    const newEvent = new EventSchema({ title, description, date, price });
+    const newEvent = new EventSchema({ title, description, date, price, image });
     await newEvent.save();
 
     res.status(201).json(newEvent);

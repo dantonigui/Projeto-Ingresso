@@ -2,8 +2,9 @@ const { payment } = require('../config/mercadopago');
 const PixPayment = require('../models/PixPayment');
 const CardPayment = require('../models/CardPayment');
 const MoneyPayment = require('../models/MoneyPayment');
-const Compra = require('../models/Compra'); // modelo de compras
-const { sendConfirmationEmail } = require('../utils/email'); // função de envio de e-mail
+const Compra = require('../models/Compra');
+const { sendConfirmationEmail } = require('../utils/email');
+const Event = require('../models/Event') 
 
 
 exports.handleWebhook = async (req, res) => {
@@ -14,12 +15,10 @@ exports.handleWebhook = async (req, res) => {
     if (topic === 'payment'){
     const pagamento = await payment.get({ id: Number(id) });
 
-    console.log(pagamento)
-
   const baseData = {
     pagamentoId: pagamento.id || '',
     email: pagamento.payer?.email || '',
-    nome: pagamento.payer?.first_name || '', // padroniza com seu schema
+    nome: pagamento.payer?.first_name || '', 
     payerId: pagamento.payer?.id || '',
     identificacao: {
       tipo: pagamento.payer?.identification?.type || '',
@@ -50,10 +49,10 @@ exports.handleWebhook = async (req, res) => {
     }
 
     await modelo.save();
-    console.log('Pagamento salvo com sucesso:', modelo);
+    //Tudo certo até aqui
+
 
       if (pagamento.status === "approved") {
-    // Cria ou atualiza uma compra
     const compra = await Compra.findOneAndUpdate(
       { pagamentoId: pagamento.id },
       {
@@ -61,13 +60,17 @@ exports.handleWebhook = async (req, res) => {
         email: pagamento.payer.email,
         nome: pagamento.payer.first_name,
         status: "approved"
-        // você pode adicionar eventId e userId se tiver essa info via `external_reference`
       },
       { upsert: true, new: true }
     );
-    emailtest = "dantoniguilherme@gmail.com"
-    // Envia email
-    await sendConfirmationEmail(emailtest, pagamento.id, pagamento.description);
+    
+    
+    let event = await Event.findOne({title:pagamento.description})
+
+    emailtest = "fariasmarianadepaula@gmail.com"
+
+    await sendConfirmationEmail(emailtest, pagamento, event);
+    
   }
 
     res.sendStatus(200);

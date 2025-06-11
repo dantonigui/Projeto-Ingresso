@@ -3,7 +3,7 @@ const { createPreference } = require('../services/mercadoPagoService')
 exports.createCheckout = async (req,res) => {
 
   try {
-    const { title, unit_price, quantity, name, email } = req.body;
+    const { title, unit_price, quantity, name, email} = req.body;
 
 
 

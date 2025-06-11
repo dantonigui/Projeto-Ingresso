@@ -18,7 +18,7 @@ function Home(){
             }
         }
         fetchEvents()
-    }, [events])
+    }, [])
 
     async function handleBuy(event) {
         try{
@@ -41,30 +41,48 @@ function Home(){
 
 return (<div>
   <Header></Header>
-  <Container className="mt-4">
-    <h2 className="mb-4 text-center">Eventos Disponíveis</h2>
-    <Row xs={1} md={2} lg={3} className="g-4">
-      {events.map((event) => (
-        <Col key={event._id}>
-          <Card>
-            <Card.Body>
-              <Card.Title>{event.title}</Card.Title>
-              <Card.Text>{event.description}</Card.Text>
-              <Card.Text>
-                <strong>Data:</strong> {event.date.substring(8, 10) + '/' + event.date.substring(5, 7) + '/' + event.date.substring(0, 4)}
-              </Card.Text>
-              <Card.Text>
-                <strong>Preço:</strong> R$ {parseFloat(event.price).toFixed(2)}
-              </Card.Text>
-              <Button variant="success" onClick={() => handleBuy(event)}>
-                Comprar
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  </Container>
+<Container className="mt-4">
+  <h2 className="mb-4 text-center">Eventos Disponíveis</h2>
+  <Row xs={1} md={2} lg={3} className="g-4">
+    {events.map((event) => (
+      <Col key={event._id}>
+        <Card>
+          <Card.Body>
+            <Row>
+              {/* Coluna da esquerda: textos */}
+              <Col xs={12} md={7}>
+                <Card.Title>{event.title}</Card.Title>
+                <Card.Text>{event.description}</Card.Text>
+                <Card.Text>
+                  <strong>Data:</strong>{" "}
+                  {event.date.substring(8, 10) + "/" + event.date.substring(5, 7) + "/" + event.date.substring(0, 4)}
+                </Card.Text>
+                <Card.Text>
+                  <strong>Preço:</strong> R$ {parseFloat(event.price).toFixed(2)}
+                </Card.Text>
+                <Button variant="success" onClick={() => handleBuy(event)}>
+                  Comprar
+                </Button>
+              </Col>
+
+              {/* Coluna da direita: imagem */}
+              <Col xs={12} md={5} className="d-flex align-items-center justify-content-center">
+                {event.image && (
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    style={{ width: "100%", maxWidth: "250px", borderRadius: "8px" }}
+                  />
+                )}
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Col>
+    ))}
+  </Row>
+</Container>
+
 </div>);
 
 }

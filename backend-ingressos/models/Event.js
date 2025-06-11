@@ -15,7 +15,8 @@ const EventSchema = new mongoose.Schema({
     price:{
         type: Number,
         required: true
-    }
+    },
+    image: String,
 })
 
 module.exports = mongoose.model('Event', EventSchema)

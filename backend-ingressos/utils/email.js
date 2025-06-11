@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
+const {gerarPDF} = require('../utils/pdf')
 
-exports.sendConfirmationEmail = async (email, pagamentoId, titleEvent) => {
+exports.sendConfirmationEmail = async (email, pagamento, event) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -9,11 +10,19 @@ exports.sendConfirmationEmail = async (email, pagamentoId, titleEvent) => {
     },
   });
 
+  const pdfBuffer = await gerarPDF(event)
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: `Confirmação de Compra - ${titleEvent}`,
-    text: `Sua compra foi confirmada com sucesso! Código do pagamento: ${pagamentoId}`,
+    subject: `Confirmação de Compra - ${event.title} - ${pagamento.id}`,
+      attachments: [
+    {
+      filename: `Ingresso-${event.title}.pdf`,
+      content: pdfBuffer,
+      contentType: 'application/pdf',
+    },
+  ],
   };
 
   await transporter.sendMail(mailOptions);

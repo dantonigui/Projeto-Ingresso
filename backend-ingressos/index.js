@@ -7,7 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 const webhookRoutes = require("./routes/webHookRoutes");
-const authMiddlewares = require('./middleware/authMiddleware')
+
 
 dotenv.config();
 const app = express();
@@ -15,6 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:3000', // só permite o frontend acessar
+     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }))
 
@@ -23,6 +24,7 @@ app.use("/api/auth",  authRoutes);
 app.use("/api/eventos", eventRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/webhook", webhookRoutes);
+
 
 // Rotas de resposta do Mercado Pago (após redirecionamento)
 app.get("/sucesso", (req, res) => res.json("Pagamento Recebido com Sucesso"));

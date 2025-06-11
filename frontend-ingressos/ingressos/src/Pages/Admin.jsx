@@ -8,12 +8,14 @@ function AdminPanel() {
   const [showModal, setShowModal] = useState(false);
   const [eventAtual, setEventAtual] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
 
   const [form, setForm] = useState({
     title: "",
     description: "",
     date: "",
     price: "",
+    image: "",
   });
 
   const token = localStorage.getItem("token");
@@ -45,6 +47,22 @@ function AdminPanel() {
     }
   };
 
+    const uploadImageToCloudinary = async () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "meu_preset");
+    data.append("cloud_name", "dfuunm4dm");
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/dfuunm4dm/image/upload", {
+      method: "POST",
+      body: data,
+    });
+
+    const json = await res.json();
+    console.log(json); // Verifique se tem json.secure_url
+    return json.secure_url; // URL da imagem
+  };
+
   const openModal = (event = null) => {
     if (event) {
       setEventAtual(event);
@@ -53,6 +71,7 @@ function AdminPanel() {
         description: event.description,
         date: event.date.substring(0, 10),
         price: event.price,
+        image: event.image || "",
       });
     } else {
       setEventAtual(null);
@@ -68,12 +87,21 @@ function AdminPanel() {
     }
 
     setLoading(true);
+
     try {
-      if (eventAtual) {
-        await axios.put(`http://localhost:5000/api/eventos/${eventAtual._id}`, form, config);
-      } else {
-        await axios.post("http://localhost:5000/api/eventos", form, config);
+      let imageUrl = form.image;
+      if (image) {
+        imageUrl = await uploadImageToCloudinary();
       }
+
+      const dataToSend = { ...form, image: imageUrl };
+
+      if (eventAtual) {
+        await axios.put(`http://localhost:5000/api/eventos/${eventAtual._id}`, dataToSend, config);
+      } else {
+        await axios.post("http://localhost:5000/api/eventos/", dataToSend, config);
+      }
+
       setShowModal(false);
       loadEvents();
     } catch (err) {
@@ -82,6 +110,7 @@ function AdminPanel() {
       setLoading(false);
     }
   };
+
 
   const deletedEvent = async (id) => {
     if (window.confirm("Tem certeza que deseja excluir este evento?")) {
@@ -125,7 +154,7 @@ function AdminPanel() {
             <tr key={ev._id}>
               <td>{ev.title}</td>
               <td>{ev.description}</td>
-              <td>{ev.date.substring(0, 10)}</td>
+              <td>{ev.date.substring(8, 10) + '/' + ev.date.substring(5, 7) + '/' + ev.date.substring(0, 4)}</td>
               <td>R$ {parseFloat(ev.price).toFixed(2)}</td>
               <td>
                 <Button
@@ -191,6 +220,16 @@ function AdminPanel() {
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
               />
             </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Imagem</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files[0])}
+            />
+            </Form.Group>
+
           </Form>
         </Modal.Body>
         <Modal.Footer>
