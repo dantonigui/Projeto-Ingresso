@@ -4,10 +4,10 @@ const dotenv = require("dotenv");
 const cors = require('cors')
 
 const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require('./routes/adminRoutes')
 const eventRoutes = require("./routes/eventRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 const webhookRoutes = require("./routes/webHookRoutes");
-
 
 dotenv.config();
 const app = express();
@@ -21,6 +21,7 @@ app.use(cors({
 
 // Usar rotas
 app.use("/api/auth",  authRoutes);
+app.use("/api/admin", adminRoutes)
 app.use("/api/eventos", eventRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/webhook", webhookRoutes);

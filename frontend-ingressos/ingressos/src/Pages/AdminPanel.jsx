@@ -20,6 +20,7 @@ function AdminPanel() {
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
+  
 
   const config = {
     headers: {
@@ -28,14 +29,15 @@ function AdminPanel() {
   };
 
   useEffect(() => {
-    if (user.isAdmin === true) {
-      loadEvents();
-    }
-  },);
+     if (user.isAdmin === true) {
+       loadEvents();
+     }
+  },[]);
+
 
   const loadEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/eventos", config);
+      const res = await axios.get("http://localhost:5000/api/eventos/", config);
       setEvents(res.data);
     } catch (err) {
       console.error("Erro ao carregar eventos:", err);
@@ -123,15 +125,15 @@ function AdminPanel() {
     }
   };
 
-  if (user && user.isAdmin === false) {
-    return (
-      <Container className="mt-5">
-        <h3>Acesso negado 🚫</h3>
-        <p>Somente administradores podem acessar esta página.</p>
-        <a href="/login">Voltar para Login</a>
-      </Container>
-    );
-  }
+  // if (user && user.isAdmin === false) {
+  //    return (
+  //      <Container className="mt-5">
+  //        <h3>Acesso negado 🚫</h3>
+  //        <p>Somente administradores podem acessar esta página.</p>
+  //       <a href="/admin">Voltar para Login</a>
+  //      </Container>
+  //    );
+  // }
 
   return (
     <Container className="mt-5">

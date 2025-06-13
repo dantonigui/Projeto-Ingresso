@@ -10,7 +10,7 @@ exports.sendConfirmationEmail = async (email, pagamento, event) => {
     },
   });
 
-  const pdfBuffer = await gerarPDF(event)
+  const pdfBuffer = await gerarPDF(event , pagamento)
 
   const mailOptions = {
     from: process.env.EMAIL_USER,

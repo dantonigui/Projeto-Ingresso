@@ -2,7 +2,7 @@ const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const fs = require('fs'); // opcional, só se for salvar localmente
 
-async function gerarPDF(event) {
+async function gerarPDF(event, pagamento) {
   const doc = new PDFDocument();
   const buffers = [];
 
@@ -18,6 +18,7 @@ async function gerarPDF(event) {
   doc.fontSize(14).text(`Evento: ${event.title}`);
   doc.text(`Data: ${new Date(event.date).toLocaleDateString()}`);
   doc.text(`Preço: R$ ${parseFloat(event.price).toFixed(2)}`);
+  doc.text(`ID Pagamento: ${pagamento.id}`)
   doc.moveDown();
 
   // Buscar imagem do Cloudinary como buffer

@@ -1,22 +1,22 @@
-const User = require("../models/User");
+const Admin = require('../models/Admin')
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config()
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-exports.registerUser = async (req, res) => {
+exports.registerAdmin = async (req, res) => {
   try {
-    const { name, email, password, phone, adress } = req.body;
+    const { name, email, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await Admin.findOne({ email });
     if (existingUser)
       return res.status(400).json({ msg: "Email já está em uso." });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ name, email, password: hashedPassword, phone, adress});
-    await newUser.save();
+    const newAdmin = new Admin({ name, email, password: hashedPassword, isAdmin: true });
+    await newAdmin.save();
 
     res.status(201).json({ msg: "Usuário registrado com sucesso." });
   } catch (err) {
@@ -24,11 +24,11 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
+exports.loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await Admin.findOne({ email });
     if (!user) return res.status(400).json({ msg: "Usuário não encontrado." });
 
     const isMatch = await bcrypt.compare(password, user.password);

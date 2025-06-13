@@ -1,9 +1,9 @@
 import  {useState} from "react"
-import {login} from '../services/api'
+import {loginAdmin} from '../services/api'
 import {useNavigate} from 'react-router-dom'
 import { Container, Form, Button } from "react-bootstrap";
 
-function Login(){
+function AdminLogin(){
     const [email,setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
@@ -13,12 +13,13 @@ function Login(){
         e.preventDefault()
 
         try {
-            const {token, user} = await login(email, password)
+            const {token, user} = await loginAdmin(email, password)
             localStorage.setItem("token", token)
             localStorage.setItem("user", JSON.stringify(user))
-            navigate("/")
+            navigate("/adminpanel")
         } catch(error) {
-            console.log("Error no Handle Submit Register", error)
+            console.log("Error no Handle Submit Login", error)
+            alert("Email ou Senha Incorretas")
         }
     } 
         
@@ -26,7 +27,7 @@ function Login(){
 
 return (
   <Container className="mt-5" style={{ maxWidth: "400px" }}>
-    <h1 className="mb-4 text-center">Login</h1>
+    <h1 className="mb-4 text-center">Login Admin</h1>
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
         <Form.Control
@@ -56,4 +57,4 @@ return (
 );
 }
 
-export default Login
+export default AdminLogin
