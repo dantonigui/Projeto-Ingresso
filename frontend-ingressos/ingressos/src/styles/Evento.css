@@ -1,0 +1,81 @@
+.Div-Container-Evento {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    height: 700px;
+    background-color: rgb(232, 232, 232);
+}
+
+.Div-Evento-Title {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.Div-Container-Ingresso {
+    height: 800px;
+    width: 60%;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.Div-Ingresso-Evento {
+
+    border: 1px solid rgb(0, 0, 0);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+
+    background-color: white;
+    height: 450px;
+    width: 350px;
+
+    border-radius: 5px;
+}
+
+
+
+/* .Div-Ingresso-Image {
+
+} */
+
+.Div-Container-Title {
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.Div-Title-Ingresso {
+    line-height: 8px;
+    margin-bottom: 15px;
+}
+
+.Div-Button-Ingresso{
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Btn-Comprar {
+    width: 95%;
+    height: 40px;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#TitleEvent {
+    font-weight: bold;
+    font-size: 22px;
+    padding-bottom: 10px;
+}
